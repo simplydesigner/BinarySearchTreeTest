@@ -1,6 +1,3 @@
-//
-// Created by magomed on 13.05.16.
-//
 #include <iostream>
 #include <fstream>
 #include "BinarySearchTreeException.h"
@@ -10,50 +7,69 @@ using namespace std;
 #ifndef BINARYSEARCHTREETEST_BINARYSEARCHTREE_HPP
 #define BINARYSEARCHTREETEST_BINARYSEARCHTREE_HPP
 
-template <typename T>
-struct BinaryTree{
+template<typename T>
+struct BinaryTree {
     T data;
-    BinaryTree* Right = NULL;
-    BinaryTree* Left = NULL;
+    BinaryTree *Right = NULL;
+    BinaryTree *Left = NULL;
 };
 
-template <class T>
+template<class T>
 class BinarySearchTree {
 public:
     BinarySearchTree();
+
     ~BinarySearchTree();
+
     BinarySearchTree(const BinarySearchTree<T> &tmp);
+
     bool Delete(BinaryTree<T> *&tmp, T value);
-    BinaryTree<T>* Find(BinaryTree<T> *&tmp, T value);
+
+    BinaryTree<T> *Find(BinaryTree<T> *&tmp, T value);
+
     void Delete_tmp(BinaryTree<T> *&tmp);
-    void ReadFromFile(string text) ;
-    void WriteInFile(string text);
+
+    void ReadFromFile(string text);
+
+    void WriteInFile(ostream &os);
+
     void Insert(BinaryTree<T> *&tmp, T value);
+
     void Print(BinaryTree<T> *tmp) const;
-    void PrintInFile(ofstream &file, BinaryTree<T> *&tmp);
+
     void Copy(BinaryTree<T> *tmp);
-    template <class U>
-    friend ostream &operator<<(ostream &os,const BinarySearchTree<U> &tmp);
+
+    void PrintInFile(ostream &os, BinaryTree<T> *&tmp);
+
+    template<class U>
+    friend ostream &operator<<(ostream &os, const BinarySearchTree<U> &tmp);
+
+    template<class U>
+    friend fstream &operator<<(std::fstream &file, BinarySearchTree<U> &tmp);
+
+    template<class U>
+    friend fstream &operator>>(std::fstream &file, BinarySearchTree<U> &tmp);
 
 private:
-    BinaryTree<T>* head;
+
+
+    BinaryTree<T> *head;
     int size;
 };
 
 
-template <class T>
+template<class T>
 BinarySearchTree<T>::BinarySearchTree()
-        :   head(NULL),
-            size(0)
-{}
+        : head(NULL),
+          size(0) { }
 
-template <class T>
+template<class T>
 BinarySearchTree<T>::BinarySearchTree(const BinarySearchTree &tmp) {
     size = tmp.size;
     Copy(tmp.head);
 }
 
-template <class T>
+template<class T>
 BinarySearchTree<T>::~BinarySearchTree() {
     if (head != NULL) {
         for (int i = 0; i < size - 1; ++i) {
@@ -63,7 +79,7 @@ BinarySearchTree<T>::~BinarySearchTree() {
     }
 }
 
-template <class T>
+template<class T>
 BinaryTree<T> *BinarySearchTree<T>::Find(BinaryTree<T> *&tmp, T value) {
     if (tmp == NULL) {
         return NULL;
@@ -78,7 +94,7 @@ BinaryTree<T> *BinarySearchTree<T>::Find(BinaryTree<T> *&tmp, T value) {
     }
 }
 
-template <class T>
+template<class T>
 void BinarySearchTree<T>::Insert(BinaryTree<T> *&tmp, T value) {
     if (tmp == NULL) {
         tmp = new BinaryTree<T>;
@@ -86,7 +102,7 @@ void BinarySearchTree<T>::Insert(BinaryTree<T> *&tmp, T value) {
         size++;
         return;
     }
-    if (tmp->data > value){
+    if (tmp->data > value) {
         Insert(tmp->Left, value);
     }
     else {
@@ -94,42 +110,42 @@ void BinarySearchTree<T>::Insert(BinaryTree<T> *&tmp, T value) {
     }
 }
 
-template <class T>
+template<class T>
 bool BinarySearchTree<T>::Delete(BinaryTree<T> *&tmp, T value) {
     if (tmp == NULL) {
         return false;
     }
-    if (tmp->data == value){
+    if (tmp->data == value) {
         Delete_tmp(tmp);
         return true;
     }
     return Delete(tmp->data > value ? tmp->Left : tmp->Right, value);
 }
 
-template <class T>
+template<class T>
 void BinarySearchTree<T>::Delete_tmp(BinaryTree<T> *&tmp) {
     if (tmp->Left == NULL) {
-        BinaryTree<T>* right = tmp->Right;
+        BinaryTree<T> *right = tmp->Right;
         delete tmp;
         tmp = right;
-    } else if(tmp->Right == NULL) {
-        BinaryTree<T>* left = tmp->Left;
+    } else if (tmp->Right == NULL) {
+        BinaryTree<T> *left = tmp->Left;
         delete tmp;
         tmp = left;
     } else {
-        BinaryTree<T>* minParent = tmp;
-        BinaryTree<T>* min = tmp->Right;
-        while(min->Left != NULL) {
+        BinaryTree<T> *minParent = tmp;
+        BinaryTree<T> *min = tmp->Right;
+        while (min->Left != NULL) {
             minParent = min;
             min = min->Left;
         }
-        (minParent->Left == min ? minParent->Left: minParent->Right) = min->Right;
+        (minParent->Left == min ? minParent->Left : minParent->Right) = min->Right;
         tmp->data = min->data;
         delete min;
     }
 }
 
-template <class T>
+template<class T>
 void BinarySearchTree<T>::Print(BinaryTree<T> *tmp) const {
     try {
         if (tmp == NULL) {
@@ -140,7 +156,7 @@ void BinarySearchTree<T>::Print(BinaryTree<T> *tmp) const {
             cout << tmp->data;
             return;
         }
-        if (tmp->Left != NULL ){
+        if (tmp->Left != NULL) {
             Print(tmp->Left);
 
         }
@@ -150,13 +166,13 @@ void BinarySearchTree<T>::Print(BinaryTree<T> *tmp) const {
         if (tmp->Right != NULL) {
             Print(tmp->Right);
         }
-    }catch (BinarySearchTreeExceptionIsEmpty tmp){
+    } catch (BinarySearchTreeExceptionIsEmpty tmp) {
         tmp.info();
     }
 
 }
 
-template <class T>
+template<class T>
 void BinarySearchTree<T>::Copy(BinaryTree<T> *tmp) {
     if (tmp == NULL) {
         return;
@@ -166,7 +182,7 @@ void BinarySearchTree<T>::Copy(BinaryTree<T> *tmp) {
     Insert(head, tmp->data);
 }
 
-template <class T>
+template<class T>
 void BinarySearchTree<T>::ReadFromFile(string text) {
     ifstream file(text);
     int value;
@@ -179,36 +195,52 @@ void BinarySearchTree<T>::ReadFromFile(string text) {
     file.close();
 }
 
-template <class T>
-void BinarySearchTree<T>::WriteInFile(string text) {
-    ofstream file(text);
-    PrintInFile(file, head);
-    file.close();
+template<class T>
+void BinarySearchTree<T>::WriteInFile(ostream &os) {
+    PrintInFile(os, head);
 }
 
-template <class T>
-void BinarySearchTree<T>::PrintInFile(ofstream &file, BinaryTree<T> *&tmp) {
+template<class T>
+void BinarySearchTree<T>::PrintInFile(ostream &os, BinaryTree<T> *&tmp) {
     if (tmp->Left == NULL && tmp->Right == NULL) {
-        file << tmp->data;
+        os << tmp->data;
         return;
     }
-    if (tmp->Left != NULL ){
-        PrintInFile(file,tmp->Left);
+    if (tmp->Left != NULL) {
+        PrintInFile(os, tmp->Left);
 
     }
 
-    file << tmp->data;
+    os << tmp->data;
 
     if (tmp->Right != NULL) {
-        PrintInFile(file,tmp->Right);
+        PrintInFile(os, tmp->Right);
     }
 }
 
-template <class U>
+template<class U>
 ostream &operator<<(ostream &os, const BinarySearchTree<U> &tmp) {
     tmp.Print(tmp.head);
     return os;
 }
 
+template<class U>
+fstream &operator<<(std::fstream &file, BinarySearchTree<U> &tmp) {
+    file << tmp.size << endl;
+    tmp.WriteInFile(file);
+    return file;
+}
+
+template<class U>
+fstream &operator>>(std::fstream &file, BinarySearchTree<U> &tmp) {
+    int value;
+    int size;
+    file >> size;
+    for (int i = 0; i < size; ++i) {
+        file >> value;
+        tmp.Insert(tmp.head, value);
+    }
+    return file;
+}
 
 #endif //BINARYSEARCHTREETEST_BINARYSEARCHTREE_HPP

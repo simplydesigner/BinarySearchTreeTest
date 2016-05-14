@@ -22,6 +22,8 @@ public:
     ~BinarySearchTree();
 
     BinarySearchTree(const BinarySearchTree<T> &tmp);
+    
+    int get_size() const;
 
     bool Delete(BinaryTree<T> *&tmp, T value);
 
@@ -77,6 +79,11 @@ BinarySearchTree<T>::~BinarySearchTree() {
         }
         delete head;
     }
+}
+
+template<class T>
+BinarySearchTree<T>::get_size() const{
+    return size;
 }
 
 template<class T>

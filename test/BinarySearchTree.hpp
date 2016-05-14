@@ -82,7 +82,7 @@ BinarySearchTree<T>::~BinarySearchTree() {
 }
 
 template<class T>
-BinarySearchTree<T>::get_size() const{
+int BinarySearchTree<T>::get_size() const{
     return size;
 }
 

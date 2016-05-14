@@ -4,5 +4,5 @@
 SCENARIO("BinarySearchTree init", "[init]") 
 {
   BinarySearchTree<int> Tree;
-  REQUIRE(Tree.size() == 0);
+  REQUIRE(Tree.get_size() == 0);
 }

@@ -1,5 +1,5 @@
 language: generic
-binary_tree:
+matrix:
   include:
     - os: linux
       env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
